@@ -1,0 +1,113 @@
+// ecma function(fat arrow function)
+// const: 상수를 정의하는 키워드
+// (parameter)=> {function body}: fat arrow function
+//const abc = () => {};
+
+import { useState } from "react";
+import { StateTest } from "./StateTest.jsx";
+import TodoAppender from "./TodoAppender.jsx";
+import TodoHeader from "./TodoHeader.jsx";
+import TodoList from "./TodoList.jsx";
+
+// function 과 fat arrow function의 기능적 차이.
+// function => 함수를 호출한 대상을 this 객체로 알 수 있다.
+// fat arrow function => this 키워드 사용 불가.
+//         함수를 호출한 대상을 알 수 없다? event 파라미터로만 알 수 있음.
+
+// export default 이후에 const 키워드가 나타날수 없음.
+const TodoMain = () => {
+  //const ==> 상수를 정의
+  // let ==> 변수를 정의
+  const todoDatas = [
+    {
+      id: "todo_1",
+      todo: "React Component Master",
+      dueDate: "2026-04-22",
+      priority: 1,
+      isDone: true,
+    },
+    {
+      id: "todo_2",
+      todo: "React Component Master2",
+      dueDate: "2026-04-25",
+      priority: 2,
+      isDone: false,
+    },
+    {
+      id: "todo_3",
+      todo: "React Component Master3",
+      dueDate: "2026-04-28",
+      priority: 3,
+      isDone: false,
+    },
+    {
+      id: "todo_4",
+      todo: "React Component Master4",
+      dueDate: "2026-04-29",
+      priority: 3,
+      isDone: false,
+    },
+    {
+      id: "todo_5",
+      todo: "React Component Master5",
+      dueDate: "2026-04-30",
+      priority: 1,
+      isDone: false,
+    },
+  ];
+
+  const [cachedData, setCachedData] = useState(todoDatas);
+
+  // 특정 todo의 isDone 값을 반전시키는 함수.
+  // 이함수를 TodoList에게 props로 전달
+  // TodoLsit 는  TodoItem에게 함수를 props로 전달.
+  const onDoneChangeHandler = (todoId) => {
+    setCachedData((prevData) => {
+      const newStateMemory = [...prevData];
+      for (const todo of newStateMemory) {
+        if (todo.id === todoId) {
+          todo.isDone = true;
+          break;
+        }
+      }
+
+      return newStateMemory;
+    });
+
+    console.log(todoId, todoDatas);
+  };
+
+  const onTaskKeyUpHandler = (event) => {
+    console.log(event.target.value);
+  };
+  const onDateChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+
+  const onSaveButtonClickHandler = () => {
+    console.log("저장합니다");
+  };
+
+  const onPrioritySelectChangeHandler = (event) => {
+    console.log(event.target.value);
+  };
+  // 컴포넌트가 만들어줄 HTML Tag set 반환.
+  return (
+    <div className="wrapper">
+      {/*<StateTest />*/}
+      <header>React Todo</header>
+      <ul className="tasks">
+        <TodoHeader />
+        <TodoList todoDatas={cachedData} onDoneChange={onDoneChangeHandler} />
+      </ul>
+      <TodoAppender
+        onDateChange={onDateChangeHandler}
+        onPrioritySelectChange={onPrioritySelectChangeHandler}
+        onSaveButtonClick={onSaveButtonClickHandler}
+        onTaskKeyUp={onTaskKeyUpHandler}
+      />
+    </div>
+  );
+};
+
+export default TodoMain;
