@@ -196,3 +196,31 @@ button.confirm-cancel {
   gap: 0.625rem;
   justify-content: center;
 }
+
+.count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  height: 100vh;
+}
+.count > button {
+  font-size: 3rem;
+  padding: 0 1rem;
+}
+.count > .minus {
+  padding: 0 1.3rem;
+  margin-bottom: 0rem;
+}
+.count > .counter {
+  font-size: 3rem;
+}
+.count > input,
+.count > .result {
+  font-size: 2rem;
+}
+.count > .buttons > button {
+  display: block;
+  font-size: 2rem;
+  width: 3rem;
+}

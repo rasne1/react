@@ -1,4 +1,5 @@
 import ArticleMain from "./components/articles/articleMain.jsx";
+import Calc from "./components/counter/Calc.jsx";
 import Counter from "./components/counter/counter.jsx";
 import TodoMain from "./components/todo/TodoMain.jsx";
 
