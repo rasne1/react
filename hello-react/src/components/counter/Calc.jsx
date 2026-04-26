@@ -1,40 +1,58 @@
 import { useState } from "react";
 
 const Calc = () => {
-  const [num1, setNum1] = useState(0);
-  const [num2, setNum2] = useState(0);
-  const [number, setNumber] = useState(0);
+  const [{ num1, num2, number }, setNums] = useState({
+    num1: 10,
+    num2: 20,
+    number: 30,
+  });
+  //   const [num1, setNum1] = useState(0);
+  //   const [num2, setNum2] = useState(0);
+  //   const [number, setNumber] = useState(0);
 
   const onNumberChange = (event) => {
-    setNum1(Number(event.target.value));
+    //setNums(Number(event.target.value));
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, num1: parseInt(event.target.value) };
+      return newNums;
+    });
   };
   const onNumber2Change = (event) => {
-    setNum2(Number(event.target.value));
+    //setNums(Number(event.target.value));
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, num2: parseInt(event.target.value) };
+      return newNums;
+    });
   };
 
-  const onPlusButtonClickHandler = () => {
-    setNumber(num1 + num2);
-  };
-  const onMinusButtonClickHandler = () => {
-    setNumber(num1 - num2);
-  };
-  const onTimesButtonClickHandler = () => {
-    setNumber(num1 * num2);
-  };
-  const onDivideButtonClickHandler = () => {
-    setNumber(num1 / num2);
+  const onCalcButtonClickHandler = (operator) => {
+    let number = 0;
+
+    if (operator === "+") {
+      number = num1 + num2;
+    } else if (operator === "-") {
+      number = num1 - num2;
+    } else if (operator === "*") {
+      number = num1 * num2;
+    } else if (operator === "/") {
+      number = num1 / num2;
+    }
+    setNums((prevNums) => {
+      const newNums = { ...prevNums, number };
+      return newNums;
+    });
   };
 
   return (
     <div className="count">
-      <input type="text" onChange={onNumberChange} />
+      <input type="text" value={num1} onChange={onNumberChange} />
       <div className="buttons">
-        <button onClick={onPlusButtonClickHandler}>+</button>
-        <button onClick={onMinusButtonClickHandler}>-</button>
-        <button onClick={onTimesButtonClickHandler}>x</button>
-        <button onClick={onDivideButtonClickHandler}>/</button>
+        <button onClick={onCalcButtonClickHandler.bind(this, "+")}>+</button>
+        <button onClick={onCalcButtonClickHandler.bind(this, "-")}>-</button>
+        <button onClick={onCalcButtonClickHandler.bind(this, "*")}>x</button>
+        <button onClick={onCalcButtonClickHandler.bind(this, "/")}>/</button>
       </div>
-      <input type="text" onChange={onNumber2Change} />
+      <input type="text" value={num2} onChange={onNumber2Change} />
       <div className="result">{number}</div>
     </div>
   );

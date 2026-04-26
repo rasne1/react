@@ -1,8 +1,8 @@
 const ArticleList = ({ articleData }) => {
   return (
     <>
-      {articleData.articles.map((articles) => (
-        <tr>
+      {articleData.map((articles) => (
+        <tr key={articles.id}>
           <td>{articles.id}</td>
           <td>{articles.subject}</td>
           <td>{articles.email}</td>

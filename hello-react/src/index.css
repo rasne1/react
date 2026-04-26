@@ -224,3 +224,22 @@ button.confirm-cancel {
   font-size: 2rem;
   width: 3rem;
 }
+.page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: #eee;
+  padding: 2rem 2rem;
+}
+.page > table {
+  border-collapse: collapse;
+  align-items: center;
+}
+
+td,
+th {
+  border: 1px solid #333;
+}
+.writer li {
+  list-style: none;
+}

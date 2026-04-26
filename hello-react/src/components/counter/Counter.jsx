@@ -2,29 +2,35 @@ import { useState } from "react";
 
 const Counter = () => {
   const [count, setCount] = useState(0);
-  const onPlusButtonClickHandler = () => {
-    console.log("클릭됨");
-    if (count < 100) {
-      setCount(count + 1);
-    }
-  };
+  const onButtonCLickHandler = (event) => {
+    const className = event.target.classList.value;
 
-  const onMinusButtonClickHandler = () => {
-    console.log("클릭됨");
-    if (count >= 1) {
-      setCount(count - 1);
-    }
+    setCount((prevCount) => {
+      if (className.includes("minus")) {
+        if (prevCount === 0) {
+          return prevCount;
+        }
+        return prevCount - 1;
+      } else if (className.includes("plus")) {
+        if (prevCount === 100) {
+          return prevCount;
+        }
+        return prevCount + 1;
+      }
+
+      return prevCount;
+    });
   };
 
   return (
     <div className="count">
-      <button className="minus" onClick={onMinusButtonClickHandler}>
+      <button className="minus" onClick={onButtonCLickHandler}>
         -
       </button>
       <div className="counter" text={count}>
         {count}
       </div>
-      <button className="plus" onClick={onPlusButtonClickHandler}>
+      <button className="plus" onClick={onButtonCLickHandler}>
         +
       </button>
     </div>
