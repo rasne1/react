@@ -4,7 +4,7 @@ import Counter from "./components/counter/Counter.jsx";
 import TodoMain from "./components/todo/TodoMain.jsx";
 
 export default function App() {
-  return <ArticleMain />;
+  return <TodoMain />;
 }
 
 //export default App;

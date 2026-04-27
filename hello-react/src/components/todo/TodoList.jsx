@@ -1,9 +1,11 @@
+import { Confirm } from "../ui/Modals";
 import TodoItem, { TodoItemForChildren } from "./TodoItem";
 
 const TodoList = ({ todoDatas, onDoneChange }) => {
   const priorities = ["없음", "높음", "보통", "낮음"];
   return (
     <>
+      <Confirm />
       {todoDatas.map((todo) => (
         <TodoItem
           key={todo.id}
@@ -11,6 +13,7 @@ const TodoList = ({ todoDatas, onDoneChange }) => {
           priorities={priorities}
           onDoneChange={onDoneChange}
         />
+
         // <TodoItemForChildren>
         //   <input id={todo.id} type="checkbox" />
         //   <label htmlFor={todo.id}>{todo.todo}</label>

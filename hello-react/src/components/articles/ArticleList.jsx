@@ -1,16 +1,23 @@
-const ArticleList = ({ articleData }) => {
+/** @format */
+
+const ArticleList = ({ contents }) => {
+  console.log("ArticleList");
+
   return (
-    <>
-      {articleData.map((articles) => (
-        <tr key={articles.id}>
-          <td>{articles.id}</td>
-          <td>{articles.subject}</td>
-          <td>{articles.email}</td>
-          <td>{articles.crtDt}</td>
-          <td>{articles.mdfyDt}</td>
+    <tbody>
+      {contents.map((article) => (
+        <tr key={article.id}>
+          <td>{article.id}</td>
+          <td>{article.subject}</td>
+          <td>
+            {article.membersVO.name}({article.membersVO.email})
+          </td>
+          <td>{article.viewCnt}</td>
+          <td>{article.crtDt}</td>
         </tr>
       ))}
-    </>
+    </tbody>
   );
 };
+
 export default ArticleList;
