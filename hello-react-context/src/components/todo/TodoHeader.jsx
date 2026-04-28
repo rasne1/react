@@ -1,15 +1,12 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { Confirm } from "../ui/Modals";
-import { useContext } from "react";
-import TodoContext from "./contexts/TodoContext";
+import { TodoContext } from "./context/Todocontext";
 
-const TodoHeader = ({ onAllDoneChange }) => {
+const TodoHeader = () => {
+  const { allDone } = useContext(TodoContext);
+
   const conFirmRef = useRef();
   const checkBoxRef = useRef();
-  const { componentName } = useContext(TodoContext);
-  if (!componentName || componentName !== "TodoGrid") {
-    return <></>;
-  }
   const onAllDoneChangeHandler = () => {
     const checked = checkBoxRef.current.checked;
     let message = "";
@@ -22,7 +19,8 @@ const TodoHeader = ({ onAllDoneChange }) => {
   };
 
   const onConfirmOkClickHandler = () => {
-    onAllDoneChange(checkBoxRef.current.checked);
+    //onAllDoneChange(checkBoxRef.current.checked);
+    allDone(checkBoxRef.current.checked);
   };
   const onConfirmCloseClickHandler = () => {
     checkBoxRef.current.checked = !checkBoxRef.current.checked;

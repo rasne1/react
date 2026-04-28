@@ -8,6 +8,8 @@ import { StateTest } from "./StateTest.jsx";
 import TodoAppender from "./TodoAppender.jsx";
 import TodoHeader from "./TodoHeader.jsx";
 import TodoList from "./TodoList.jsx";
+import TodoItem from "./TodoItem.jsx";
+import TodoGrid from "./TodoGrid.jsx";
 
 // function 과 fat arrow function의 기능적 차이.
 // function => 함수를 호출한 대상을 this 객체로 알 수 있다.
@@ -98,10 +100,25 @@ const TodoMain = () => {
     <div className="wrapper">
       {/*<StateTest />*/}
       <header>React Todo</header>
-      <ul className="tasks">
+      <TodoGrid>
         <TodoHeader onAllDoneChange={onAllDoneChangeHandler} />
-        <TodoList todoDatas={cachedData} onDoneChange={onDoneChangeHandler} />
-      </ul>
+        <TodoList>
+          {cachedData.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              onDoneChange={onDoneChangeHandler}
+            />
+
+            // <TodoItemForChildren>
+            //   <input id={todo.id} type="checkbox" />
+            //   <label htmlFor={todo.id}>{todo.todo}</label>
+            //   <span className="due-date">{todo.dueDate}</span>
+            //   <span className="priority">{priorities[todo.priority]}</span>
+            // </TodoItemForChildren>
+          ))}
+        </TodoList>
+      </TodoGrid>
       <TodoAppender onAddClick={onAddClickHandler} />
     </div>
   );

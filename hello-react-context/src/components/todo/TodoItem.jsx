@@ -1,37 +1,32 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import { Confirm } from "../ui/Modals";
-import { useContext } from "react";
-import TodoContext from "./contexts/TodoContext";
+import { TodoContext } from "./context/Todocontext";
 
-const TodoItem = ({ todo, onDoneChange }) => {
-  const priorities = ["없음", "높음", "보통", "낮음"];
-  const checkBoxRef = useRef();
-  const conFirmRef = useRef();
-  const { componentName } = useContext(TodoContext);
-  console.log("TodoItem" + componentName);
-
-  if (!componentName || componentName !== "TodoList") {
-    return <></>;
-  }
+const TodoItem = ({ id, priorities }) => {
   // props todo의 이름과 todo.todo의 이름이 같아 객체구조 분해 불가
   // toto.todo의 이름을 todoTask로 변경해 할당
-  const { id, todo: todoTask, dueDate, priority } = todo;
 
-  const doneClass = todo.isDone ? "done" : "";
+  const { getTodo, done } = useContext(TodoContext);
+  const { id: todoId, todo: todoTask, dueDate, priority, isDone } = getTodo(id);
 
+  const doneClass = isDone ? "done" : "";
+
+  const checkBoxRef = useRef();
+  const conFirmRef = useRef();
   const onDoneChangeHandler = () => {
     const checked = checkBoxRef.current.checked;
     let message = "";
     if (checked) {
-      message = todo.todo + "완료하시겠습니까?";
+      message = todoTask + "완료하시겠습니까?";
     } else {
-      message = todo.todo + "취소하시겠습니까?";
+      message = todoTask + "취소하시겠습니까?";
     }
     conFirmRef.current.showModal(message);
   };
 
   const onConfirmOkClickHandler = () => {
-    onDoneChange(todo.id, !todo.isDone);
+    //onDoneChange(todoId, !todo.isDone);
+    done(todoId, !checkBoxRef.current.checked);
   };
   const onConfirmCloseClickHandler = () => {};
 
@@ -43,9 +38,9 @@ const TodoItem = ({ todo, onDoneChange }) => {
         onCloseClick={onConfirmCloseClickHandler}
       />
       <input
-        id={id}
+        id={todoId}
         type="checkbox"
-        checked={todo.isDone}
+        checked={isDone}
         onChange={onDoneChangeHandler}
         ref={checkBoxRef}
       />
