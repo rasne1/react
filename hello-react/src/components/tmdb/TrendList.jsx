@@ -2,11 +2,11 @@ import TrendItem from "./TrendItem";
 
 const TrendList = ({ movies }) => {
   return (
-    <>
-      {movies.map((movie) => {
-        <TrendItem key={movies.id} movie={movie} />;
-      })}
-    </>
+    <div className="movie-List">
+      {movies.map((movie) => (
+        <TrendItem key={movie.id} movie={movie} />
+      ))}
+    </div>
   );
 };
 export default TrendList;

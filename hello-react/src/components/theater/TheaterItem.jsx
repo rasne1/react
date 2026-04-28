@@ -1,4 +1,4 @@
-const TrendItem = ({ movie }) => {
+const TheaterItem = ({ movie }) => {
   return (
     <li className="movie">
       <img src={movie.poster} />
@@ -7,4 +7,4 @@ const TrendItem = ({ movie }) => {
     </li>
   );
 };
-export default TrendItem;
+export default TheaterItem;

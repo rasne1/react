@@ -1,13 +1,15 @@
+import TmdbContext from "./contexts/TmdbContext";
+
 const TrendBox = ({ children }) => {
   const providerProps = {
-    componentName: "TodoGrid",
+    componentName: "TrendBox",
   };
   return (
-    <ul className="tasks">
-      <TodoContext.Provider value={providerProps}>
+    <div className="tasks">
+      <TmdbContext.Provider value={providerProps}>
         {children}
-      </TodoContext.Provider>
-    </ul>
+      </TmdbContext.Provider>
+    </div>
   );
 };
 

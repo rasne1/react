@@ -243,3 +243,10 @@ th {
 .writer li {
   list-style: none;
 }
+.movie-List {
+  display: flex;
+  gap: 1rem;
+}
+.movie {
+  list-style: none;
+}
