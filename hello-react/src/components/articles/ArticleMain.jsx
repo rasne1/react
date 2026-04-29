@@ -1,9 +1,12 @@
 // articles.json 파일 불러오기
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ArticleHeader from "./ArticleHeader.jsx";
 import ArticleList from "./ArticleList.jsx";
 import ArticleWriter2 from "./ArticleWriter2.jsx";
-import { fetchArticleList } from "../../http/articles/fetchArticles.js";
+import {
+  fetchArticleList,
+  fetchJsonWebToken,
+} from "../../http/articles/fetchArticles.js";
 
 const ArticleMain = () => {
   // state를 변경했다!
@@ -11,6 +14,8 @@ const ArticleMain = () => {
   console.log("ArticleMain");
 
   const [viewPageNO, setViewPageNO] = useState(0);
+
+  const [token, setToken] = useState(null);
 
   const onPaginationButtonClickHandler = (nextPageNo) => {
     setViewPageNO(nextPageNo);
@@ -64,9 +69,34 @@ const ArticleMain = () => {
     ]);
   };
 
+  const idRef = useRef();
+  const passwordRef = useRef();
+
+  const onLoginClickHandler = async () => {
+    const id = idRef.current.value;
+    const password = passwordRef.current.value;
+    const articleLogin = await fetchJsonWebToken(id, password);
+    console.log(id, password);
+
+    if (articleLogin.error) {
+      return alert(articleLogin.error);
+    }
+    setToken(articleLogin.token);
+  };
+
   return (
     <div className="wrapper">
       <div>{count}개의 게시글이 검색되었습니다.</div>
+      {token === null && (
+        <div>
+          <div>아이디</div>
+          <input type="text" ref={idRef} />
+          <div>패스워드</div>
+          <input type="password" ref={passwordRef} />
+          <button onClick={onLoginClickHandler}>login</button>
+        </div>
+      )}
+
       <table>
         <ArticleHeader />
         <ArticleList contents={articles} />

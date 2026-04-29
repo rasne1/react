@@ -1,7 +1,7 @@
 export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   try {
     const articlesResponse = await fetch(
-      `http://192.168.211.23:8080/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
+      `http://220.76.62.226:8080/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
     );
     const articleList = await articlesResponse.json();
     return articleList;
@@ -14,6 +14,26 @@ export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   }
 };
 
-export const fetchJsonWebToken = (id, password) => {};
+export const fetchJsonWebToken = async (id, password) => {
+  try {
+    const loginResponse = await fetch(
+      `http://220.76.62.226:8080/api/authoriztion`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: id, password: password }),
+      },
+    );
+
+    const loginResult = await loginResponse.json();
+    console.log("서버응답:", loginResult);
+    return loginResult;
+  } catch (e) {
+    return {
+      error: "아이디 또는 비밀번호가 일치하지 않습니다.",
+      status: 400,
+    };
+  }
+};
 
 export const fetchAddArticle = () => {};
