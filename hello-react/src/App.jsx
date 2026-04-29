@@ -7,7 +7,7 @@ import TrendMain from "./components/tmdb/trendMain.jsx";
 import TodoMain from "./components/todo/TodoMain.jsx";
 
 export default function App() {
-  return <TheaterMain />;
+  return <ArticleMain />;
 }
 
 //export default App;

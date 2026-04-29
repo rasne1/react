@@ -1,7 +1,13 @@
-import { useRef } from "react";
+import { memo, useRef } from "react";
 import { Alert } from "../ui/Modals";
 
-const TodoAppender = ({ onAddClick }) => {
+const TodoAppender = memo(({ onAddClick }) => {
+  console.log("TodoAppender");
+
+  //component Rendering을 Delay
+  // for (let i = 1; i <= 100000; i++) {
+  //   console.log(i);
+  // }
   const taskRef = useRef();
   const dateRef = useRef();
   const priorityRef = useRef();
@@ -49,6 +55,6 @@ const TodoAppender = ({ onAddClick }) => {
       </button>
     </footer>
   );
-};
+});
 
 export default TodoAppender;
