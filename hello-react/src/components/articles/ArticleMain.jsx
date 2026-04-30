@@ -4,9 +4,12 @@ import ArticleHeader from "./ArticleHeader.jsx";
 import ArticleList from "./ArticleList.jsx";
 import ArticleWriter2 from "./ArticleWriter2.jsx";
 import {
+  fetchAddArticle,
   fetchArticleList,
   fetchJsonWebToken,
 } from "../../http/articles/fetchArticles.js";
+import { getValidationReuslt } from "../../utils/errorHandler.js";
+import { isString } from "../../utils/type.js";
 
 const ArticleMain = () => {
   // state를 변경했다!
@@ -15,7 +18,13 @@ const ArticleMain = () => {
 
   const [viewPageNO, setViewPageNO] = useState(0);
 
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState();
+  const [loginErrors, setLoginErrors] = useState();
+
+  const writerRef = useRef();
+
+  const idRef = useRef();
+  const passwordRef = useRef();
 
   const onPaginationButtonClickHandler = (nextPageNo) => {
     setViewPageNO(nextPageNo);
@@ -51,26 +60,20 @@ const ArticleMain = () => {
     refreshArticleList();
   }, [viewPageNO]);
 
-  const onAddArticleClickHandler = (subject, name, email, content) => {
-    setArticles((prevData) => [
-      ...prevData,
-      {
-        id: prevData.length + 1,
-        subject,
-        content,
-        email,
-        viewCnt: parseInt(Math.random() * 10000),
-        crtDt: "2026-04-29",
-        mdfyDt: null,
-        fileGroupId: null,
-        membersVO: { email, name },
-        files: [],
-      },
-    ]);
-  };
+  const onAddArticleClickHandler = async (subject, content, attachFile) => {
+    const fetchAddResult = await fetchAddArticle(
+      token,
+      subject,
+      content,
+      attachFile,
+    );
 
-  const idRef = useRef();
-  const passwordRef = useRef();
+    if (fetchAddResult.error) {
+      writerRef.current.setResponseError(fetchAddResult.error);
+    } else {
+      refreshArticleList();
+    }
+  };
 
   const onLoginClickHandler = async () => {
     const id = idRef.current.value;
@@ -79,7 +82,11 @@ const ArticleMain = () => {
     console.log(id, password);
 
     if (articleLogin.error) {
-      return alert(articleLogin.error);
+      if (isString(articleLogin.error)) {
+        setLoginErrors(articleLogin.error);
+      } else {
+        setLoginErrors(getValidationReuslt(articleLogin.error));
+      }
     }
     setToken(articleLogin.token);
   };
@@ -87,12 +94,17 @@ const ArticleMain = () => {
   return (
     <div className="wrapper">
       <div>{count}개의 게시글이 검색되었습니다.</div>
-      {token === null && (
+      {!token && (
         <div>
-          <div>아이디</div>
-          <input type="text" ref={idRef} />
-          <div>패스워드</div>
-          <input type="password" ref={passwordRef} />
+          {isString(loginErrors) && <div>{loginErrors}</div>}
+          <div>
+            <div>아이디</div>
+            <input type="text" ref={idRef} />
+            {loginErrors?.email && <div>{loginErrors.email}</div>}
+            <div>패스워드</div>
+            <input type="password" ref={passwordRef} />
+            {loginErrors?.password && <div>{loginErrors.password}</div>}
+          </div>
           <button onClick={onLoginClickHandler}>login</button>
         </div>
       )}
@@ -117,7 +129,10 @@ const ArticleMain = () => {
           </button>
         )}
       </div>
-      <ArticleWriter2 onAddArticleClick={onAddArticleClickHandler} />
+      <ArticleWriter2
+        errorHandlerRef={writerRef}
+        onAddArticleClick={onAddArticleClickHandler}
+      />
     </div>
   );
 };

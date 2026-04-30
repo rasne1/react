@@ -5,9 +5,15 @@ import TheaterMain from "./components/theater/theaterMain.jsx";
 import TrendBox from "./components/tmdb/TrendBox.jsx";
 import TrendMain from "./components/tmdb/trendMain.jsx";
 import TodoMain from "./components/todo/TodoMain.jsx";
+import { ReactReduxProvider } from "./stores/redux/ReactReduxProvider.jsx";
+import { ToolkitProvider } from "./stores/toolkit/ToolkitProvider.jsx";
 
 export default function App() {
-  return <ArticleMain />;
+  return (
+    <ToolkitProvider>
+      <TodoMain />
+    </ToolkitProvider>
+  );
 }
 
 //export default App;
