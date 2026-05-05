@@ -1,7 +1,7 @@
 export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
   try {
     const articlesResponse = await fetch(
-      `http://192.168.211.23:8080/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
+      `http://175.209.141.212:8080/api/articles?pageNo=${pageNo}&listSize=${listSize}`,
     );
     const articleList = await articlesResponse.json();
     return articleList;
@@ -17,7 +17,7 @@ export const fetchArticleList = async (pageNo = 0, listSize = 10) => {
 export const fetchJsonWebToken = async (id, password) => {
   try {
     const loginResponse = await fetch(
-      `http://192.168.211.23:8080/api/authoriztion`,
+      `http://175.209.141.212:8080/api/authoriztion`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -47,7 +47,7 @@ export const fetchAddArticle = async (jwt, subject, content, attachFile) => {
       formData.append("attachFile", file);
     }
     const articlesResponse = await fetch(
-      `http://192.168.211.23:8080/api/articles`,
+      `http://175.209.141.212:8080/api/articles`,
       {
         method: "POST",
         headers: { Authorization: jwt },

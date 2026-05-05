@@ -10,15 +10,19 @@ import {
 } from "../../http/articles/fetchArticles.js";
 import { getValidationReuslt } from "../../utils/errorHandler.js";
 import { isString } from "../../utils/type.js";
+import { useDispatch, useSelector } from "react-redux";
+import { articleAction } from "../../stores/toolkit/slices/articleSlice.js";
+import { userAction } from "../../stores/toolkit/slices/userSlice.js";
 
 const ArticleMain = () => {
   // state를 변경했다!
   // 컴포넌트가 재실행된다. (props의 전달 여부 관계 없이.)
   console.log("ArticleMain");
 
+  const articleDispatcher = useDispatch();
+
   const [viewPageNO, setViewPageNO] = useState(0);
 
-  const [token, setToken] = useState();
   const [loginErrors, setLoginErrors] = useState();
 
   const writerRef = useRef();
@@ -26,22 +30,16 @@ const ArticleMain = () => {
   const idRef = useRef();
   const passwordRef = useRef();
 
+  const token = useSelector((state) => state.user.token);
+
+  const {
+    count,
+    list: articles,
+    pagination: { pageNo = 0, pageCount = 0 },
+  } = useSelector((state) => state.article);
   const onPaginationButtonClickHandler = (nextPageNo) => {
     setViewPageNO(nextPageNo);
   };
-
-  const [
-    {
-      count,
-      result: articles,
-      pagination: { pageNo = 0, pageCount = 0 },
-    },
-    setArticles,
-  ] = useState({
-    count: 0,
-    result: [],
-    pagination: {},
-  });
 
   const refreshArticleList = async () => {
     const articleList = await fetchArticleList(viewPageNO);
@@ -50,7 +48,7 @@ const ArticleMain = () => {
       pagination,
     } = articleList;
 
-    setArticles({ count, result, pagination });
+    articleDispatcher(articleAction.refresh({ count, result, pagination }));
 
     if (articleList.error) {
       alert(articleList.error);
@@ -88,7 +86,7 @@ const ArticleMain = () => {
         setLoginErrors(getValidationReuslt(articleLogin.error));
       }
     }
-    setToken(articleLogin.token);
+    articleDispatcher(userAction.loginSuccess(articleLogin.token));
   };
 
   return (

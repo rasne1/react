@@ -11,7 +11,7 @@ import { ToolkitProvider } from "./stores/toolkit/ToolkitProvider.jsx";
 export default function App() {
   return (
     <ToolkitProvider>
-      <TodoMain />
+      <ArticleMain />
     </ToolkitProvider>
   );
 }
