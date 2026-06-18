@@ -1,5 +1,3 @@
-/** @format */
-
 const ArticleHeader = () => {
   console.log("ArticleHeader");
   return (

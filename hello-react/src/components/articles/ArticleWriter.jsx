@@ -1,27 +1,122 @@
-const ArticleWriter = ({
-  inputData: { subject, name, content, email },
-  onSaveButtonClick,
-  onsubjectChange,
-  onNameChange,
-  onEmailChange,
-  onContentChange,
-  setState,
-}) => {
+import { useRef, useState } from "react";
+import { Alert } from "../ui/Modals";
+import { isString } from "../../utils/type";
+import { useDispatch, useSelector } from "react-redux";
+import { articleThunks } from "../../stores/toolkit/slices/articleSlice";
+
+const Input = ({ id, title, type = "text", ref, ...props }) => {
+  console.log("Input");
   return (
-    <>
-      <li>
-        <div>제목</div>
-        <input type="text" onChange={onsubjectChange} value={subject} />
-        <div>이름</div>
-        <input type="text" onChange={onNameChange} value={name} />
-        <div>이메일</div>
-        <input type="text" onChange={onEmailChange} value={email} />
-        <div>내용</div>
-        <input type="text" onChange={onContentChange} value={content} />
-      </li>
-      <button onClick={onSaveButtonClick}>저장</button>
-      <button onClick={() => setState(false)}>취소</button>
-    </>
+    <div className="input-field">
+      <label htmlFor={id}>{title}</label>
+      <input type={type} id={id} ref={ref} {...props} />
+    </div>
+  );
+};
+
+const Textarea = ({ id, title, ref, ...props }) => {
+  console.log("Textarea");
+  return (
+    <div className="input-field">
+      <label htmlFor={id}>{title}</label>
+      <textarea id={id} ref={ref} {...props}></textarea>
+    </div>
+  );
+};
+
+const ArticleWriter = () => {
+  console.log("ArticleWriter");
+
+  const { token } = useSelector((store) => store.user);
+
+  const {
+    error: { list: addError },
+  } = useSelector((store) => store.article);
+  const [viewMode, setViewMode] = useState("button");
+
+  const subjectRef = useRef();
+  const contentRef = useRef();
+  const attachFileRef = useRef();
+
+  const alertRef = useRef();
+
+  const toolkitDispatcher = useDispatch();
+
+  if (!token) {
+    return <></>;
+  }
+
+  // 저장을 클릭하면 입력했던 값을 가져와 출력한다.
+  const onSaveButtonClickHandler = async () => {
+    console.log(alertRef);
+
+    if (!subjectRef.current.value) {
+      alertRef.current.showModal("제목을 입력해주세요.");
+      return;
+    }
+    if (!contentRef.current.value) {
+      alertRef.current.showModal("내용을 입력해주세요.");
+      return;
+    }
+
+    toolkitDispatcher(
+      articleThunks.write(
+        subjectRef.current.value,
+        contentRef.current.value,
+        attachFileRef.current.files,
+      ),
+    );
+
+    subjectRef.current.value = "";
+    contentRef.current.value = "";
+    attachFileRef.current.value = "";
+  };
+
+  const onViewChangeButtonClickHandler = (viewName) => {
+    setViewMode(viewName);
+  };
+
+  return (
+    <div className="article-writer">
+      {viewMode === "button" && (
+        <button
+          type="button"
+          onClick={onViewChangeButtonClickHandler.bind(this, "form")}
+        >
+          글쓰기
+        </button>
+      )}
+      {viewMode === "form" && (
+        <>
+          <Alert dialogRef={alertRef} />
+          {isString(addError) && <div>{addError}</div>}
+          <Input id="subject" title="제목" ref={subjectRef} />
+          <Textarea id="content" title="내용" ref={contentRef} />
+          <Input
+            type="file"
+            id="file"
+            title="첨부파일"
+            ref={attachFileRef}
+            multiple
+          />
+
+          <button
+            type="button"
+            className="positive-button"
+            onClick={onSaveButtonClickHandler}
+          >
+            저장
+          </button>
+          <button
+            type="button"
+            className="negative-button"
+            onClick={onViewChangeButtonClickHandler.bind(this, "button")}
+          >
+            취소
+          </button>
+        </>
+      )}
+    </div>
   );
 };
 export default ArticleWriter;
